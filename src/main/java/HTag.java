@@ -2,14 +2,20 @@ public class HTag extends Tag{
     private byte number;
     public HTag(int hnum) {
         number = (byte) hnum;
-        this.setTagname("h" + number);
+        this.setNumber(number);
+
     }
     public byte getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(byte number) {
         this.number = (byte) number;
+        this.settagName("h" + number);
+    }
+
+    public void setNumber(int number) {
+        this.setNumber((byte)number);
     }
 
     @java.lang.Override
