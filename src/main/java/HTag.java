@@ -5,6 +5,10 @@ public class HTag extends Tag{
         this.setNumber(number);
 
     }
+    public HTag(String text, int hnum) {
+        this(hnum);
+        super.setText(text);
+    }
     public byte getNumber() {
         return number;
     }

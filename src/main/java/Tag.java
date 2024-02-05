@@ -2,8 +2,11 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Tag {
+
+    private static int nextId = 0;
     private String id;
     private String tagName;
     private String text;
@@ -11,6 +14,7 @@ public abstract class Tag {
     private String color = ""; //#ff0000 = red
 
     public Tag(){
+        id = "" + Tag.nextId++;
         children = new ArrayList<>();
     }
 
@@ -89,31 +93,52 @@ public void setColor(int red, int green, int blue){
         String s2 = "<" + tagName + "/>";
         return s1 + s2;
     }
-    public String toHtmlString(){
+
+    public boolean hasLineShift(){
+        return true;
+    }
+    public String toHtmlString() {
         String s1 = "<" + tagName + ">";
-        if (this.getColor().length() > 0){
-            s1 = "<" + tagName+ " style=" + '"' + "background-color:" + color + '"' + ">";
+        if (this.getColor().length() > 0) {
+            s1 = "<" + tagName + " style=" + '"' + "background-color:" + color + '"' + ">";
         } else {
-        s1 = "<" + tagName + ">";
+            s1 = "<" + tagName + ">";
         }
 
-       for (Tag tag: children){
-          String child = tag.toHtmlString();
-          s1 = s1 + (char) 10 + child;
-       }
-        String s2 = text + "<" + tagName + "/>";
-        return s1 + s2;
-    }
-    public String toHtmlStringFile(String fileName){
-        String outputFile = fileName;
-        try{
-            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-            writer.write(this.toHtmlString());
-            writer.close();
-        } catch (Exception msg){
-            System.out.println(msg.getMessage());
+        for (Tag tag : children) {
+            String child = tag.toHtmlString();
+            if (this.hasLineShift()) {
+                s1 = s1 + (char) 10 + child;
+            } else {
+                s1 += child;
+            }
+
         }
-        return fileName;
+                String s2 = text + "<" + tagName + "/>";
+                return s1 + s2;
+    }
+            public String toHtmlStringFile (String fileName){
+                String outputFile = fileName;
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+                    writer.write(this.toHtmlString());
+                    writer.close();
+                } catch (Exception msg) {
+                    System.out.println(msg.getMessage());
+                }
+                return fileName;
+            }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tag tag = (Tag) o;
+        return Objects.equals(id, tag.id);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

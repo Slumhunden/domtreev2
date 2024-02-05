@@ -1,45 +1,21 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args){
-        System.out.println("jeg er et htag");
+    public static void main(String[] args) {
+        Set<Tag> tags = new HashSet<>();
+        HTag htag = new HTag("hej", 1);
+        tags.add(htag);
+        System.out.println(tags.size());
+        tags.add(htag);
+        System.out.println(tags.size());
+        boolean ct = tags.contains(htag);
+        HTag htag2 = new HTag("hej", 1);
+        htag2.setId(htag.getId());
+        tags.add(htag2);
 
-         HTag hTag = new HTag(1);
-         hTag.setText("jeg er et h tag");
-
-        System.out.println(hTag);
-        System.out.println("git");
-        System.out.println(hTag.toHtmlString());
-
-        List<Tag> hTags = new ArrayList<>();
-        for (int i = 3; i>0; i--) {
-            HTag hTag2 = new HTag(5-(i % 5));
-            hTag2.setText("jeg er et " + hTag2.getTagname()+ " tag");
-            hTag2.setColor(i*4, i*8,i*5);
-            hTags.add(hTag2);
-            for (int j=1; j<=5; j++){
-                PTag ptag = new PTag();
-                ptag.setText("Jeg er en Ptag indeni " + hTag2.getTagname());
-                ptag.setColor(i+50,i+100,i+200);
-                hTags.add(ptag);
-            }
-
+        for (Tag tag : tags) {
+            System.out.println(tag);
+            System.out.println(tags.size());
         }
-        System.out.println(hTags.size());
-        for (Tag tag: hTags) {
-            System.out.println(tag.toHtmlString());
-            if(tag instanceof PTag){
-                System.out.println("PPPPP");
-            }
-        }
-        BodyTag body = new BodyTag();
-        body.setChildren(hTags);
-        System.out.println(body);
-        System.out.println(body.toHtmlString());
-        body.toHtmlStringFile("index.html");
-
-        body.setColor(255, 10, 15);
-        System.out.println(body.getColor());
     }
 }
